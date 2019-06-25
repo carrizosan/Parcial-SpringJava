@@ -12,8 +12,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpClientErrorException;
+
+import utn.demo.model.ComentariosXPublicacionDto;
 import utn.demo.model.Publicacion;
 import utn.demo.model.Usuario;
+import utn.demo.repositories.ComentariosXPublicacion;
+import utn.demo.repositories.ComentariosXPublicacionRepository;
 import utn.demo.repositories.PublicacionRepository;
 import utn.demo.repositories.UsuarioRepository;
 
@@ -33,6 +37,8 @@ public class PublicacionController {
     PublicacionRepository publicacionRepository;
     @Autowired
     UsuarioController usuarioController;
+    @Autowired
+    ComentariosXPublicacionRepository comentariosXPublicacionRepository;
 
     @PostMapping("/{id}") // id user
     public void addPublicacion(@RequestBody Publicacion p, @PathVariable Integer id) {
@@ -52,4 +58,17 @@ public class PublicacionController {
                 new HttpClientErrorException(HttpStatus.BAD_REQUEST, String.format(PUBLICATION_NOT_FOUND, id)));
     }
 
+
+    // EJERCICIO 1, FORMATO DE QUERY EN INTERFAZ ComentariosXPublicacion.
+    // SIN REPOSITORIO EXCLUSIVO
+    @GetMapping("/projection")
+    public List<ComentariosXPublicacion> getAllDetailed() {
+        return publicacionRepository.getPublicacionesDetalladas();
+    }
+
+    //EJERCICIO 2, FORMATO DE QUERY CON DTO USANDO REPOSITORY EXCLUSIVO
+    @GetMapping("/projection2")
+    public List<ComentariosXPublicacionDto> getAllDto() {
+        return comentariosXPublicacionRepository.getPublicacionesDetalladas();
+    }
 }
